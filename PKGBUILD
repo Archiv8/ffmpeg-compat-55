@@ -2,32 +2,77 @@
 
 pkgname=ffmpeg-compat-55
 pkgver=2.3.6
-pkgrel=3
+pkgrel=4
 pkgdesc="Compatibility package for ffmpeg to provide versions 55 of libavcodec, libavdevice and libavformat, not anymore provided by the ffmpeg package"
-arch=('i686' 'x86_64')
+arch=(
+  "i686"
+  "x86_64"
+)
 url="http://ffmpeg.org/"
-license=('GPL')
-depends=('gsm' 'lame' 'opencore-amr' 'openjpeg' 'opus' 'rtmpdump' 'libvpx'
-         'schroedinger' 'speex' 'v4l-utils' 'xvidcore' 'libpulse'
-         'libtheora' 'libbluray' 'libmodplug' 'libva' 'libxv' 'sdl' 'jack'
-         'libavutil-52')
-makedepends=('yasm' 'libass')
-provides=('libavcodec.so' 'libavdevice.so' 'libavformat.so')
-source=("http://ffmpeg.org/releases/ffmpeg-${pkgver}.tar.bz2"
-        "http://ffmpeg.org/releases/ffmpeg-${pkgver}.tar.bz2.asc"
-        "libvpx_VP8E_UPD_ENTROPY.patch"::"https://git.videolan.org/?p=ffmpeg.git;a=commitdiff_plain;h=6540fe04a3f9a11ba7084a49b3ee5fa2fc5b32ab")
-sha256sums=('cf1be1c5c3973b8db16b6b6e8e63a042d414fb5d47d3801a196cbba21a0a624a'
-            'SKIP'
-            '1e4a01ed62db525607f9d0c708ef7889474222f9ae31aac057c5bb67edf7e38f')
-validpgpkeys=('FCF986EA15E6E293A5644F10B4322F04D67658D8')
+license=(
+  "GPL"
+)
+depends=(
+  "gsm"
+  "lame"
+  "opencore-amr"
+  "openjpeg"
+  "opus"
+  "rtmpdump"
+  "libvpx"
+  "schroedinger"
+  "speex"
+  "v4l-utils"
+  "xvidcore"
+  "libpulse"
+  "libtheora"
+  "libbluray"
+  "libmodplug"
+  "libva"
+  "libxv"
+  "sdl"
+  "jack"
+  "libavutil-52"
+)
+makedepends=(
+  "yasm"
+  "libass"
+)
+provides=(
+  "libavcodec.so"
+  "libavdevice.so"
+  "libavformat.so"
+)
+source=(
+  "http://ffmpeg.org/releases/ffmpeg-${pkgver}.tar.bz2"
+  "http://ffmpeg.org/releases/ffmpeg-${pkgver}.tar.bz2.asc"
+  "libvpx_VP8E_UPD_ENTROPY.patch"::"https://git.videolan.org/?p=ffmpeg.git;a=commitdiff_plain;h=6540fe04a3f9a11ba7084a49b3ee5fa2fc5b32ab"
+)
+sha512sums=(
+  "8f46648ae54edc5a57d2a120d60aa84ad7f9631986bf9b63a7650467322164756dc3bf3f677a4c250331fd2dbc4db002e2bdbfa3e4561397532267b46f15c2fe"
+  "SKIP"
+  "39c2fc65a521c0dbc421a706b81c534e0ffa802f03a8f11a84eefe716ddefca64ca0741c3de3df4d9e1ad9a2658d2daa5bfb28817efbe72f979fc6854951364e"
+)
+options=(
+
+  # Add !lto to options to prevent build failure
+  "!lto"
+)
+validpgpkeys=(
+  "FCF986EA15E6E293A5644F10B4322F04D67658D8"
+)
 
 prepare() {
+
   cd "ffmpeg-${pkgver}"
+
   patch -p1 -i "../libvpx_VP8E_UPD_ENTROPY.patch"
 }
 
 build() {
+
   cd "ffmpeg-${pkgver}"
+
   ./configure \
     --prefix=/usr \
     --incdir="/usr/include" \
@@ -70,13 +115,17 @@ build() {
     --disable-postproc \
     --disable-swresample \
     --disable-swscale
+
   make
 }
 
 package() {
+
   cd "ffmpeg-${pkgver}"
+
   make DESTDIR="${pkgdir}" install-libs
+
   cd "${pkgdir}/usr/lib"
+
   rm -f *.so libavutil.*
 }
-
