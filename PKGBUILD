@@ -1,4 +1,12 @@
-# Maintainer: Muflone http://www.muflone.com/contacts/english/
+#!/bin/bash
+
+# Based on original packaging by Muflone http://www.muflone.com/contacts/english/
+
+# Disable various shellcheck rules that produce false positives in this file.
+# Repository rules should be added to the .shellcheckrc file located in the
+# repository root directory, see https://github.com/koalaman/shellcheck/wiki
+# and https://archiv8.github.io for further information.
+# shellcheck disable=SC2034,SC2154
 
 pkgname=ffmpeg-compat-55
 pkgver=2.3.6
